@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Bahasa Mandarin - Yohanes 3:16</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .story-container {
+            background: white;
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .story-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcf7f, #4d96ff);
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2.3em;
+            line-height: 1.2;
+        }
+        
+        .main-verse {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .verse-chinese {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .verse-chinese:hover {
+            transform: scale(1.01);
+            text-shadow: 0 2px 10px rgba(255,255,255,0.3);
+        }
+        
+        .character {
+            display: inline-block;
+            margin: 2px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .character:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .character.playing {
+            background: rgba(255,255,255,0.4) !important;
+            transform: scale(1.1) !important;
+            animation: pulse 0.6s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1.1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .verse-pinyin {
+            font-style: italic;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+        
+        .verse-english {
+            font-size: 1.1em;
+            font-style: italic;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .verse-indonesian {
+            font-size: 1.1em;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        .verse-reference {
+            font-size: 1em;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 25%;
+            transition: width 0.5s ease;
+        }
+        
+        .lesson-section {
+            margin: 30px 0;
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 20px 0 15px 0;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .word-breakdown {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .word-card {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .word-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        
+        .word-chinese {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #c0392b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .pronounce-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        
+        .pronounce-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        .pronounce-btn:active {
+            background: #2ecc71;
+        }
+        
+        .word-pinyin {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .word-english {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .word-indonesian {
+            font-size: 1.1em;
+            color: #27ae60;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .word-explanation {
+            background: #e8f4fd;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+            line-height: 1.5;
+        }
+        
+        .grammar-section {
+            background: linear-gradient(135deg, #fff5f5, #ffffff);
+            border: 2px solid #ff6b6b;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .grammar-title {
+            color: #e74c3c;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .grammar-point {
+            background: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .example-sentence {
+            background: #f8f9fa;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+        
+        .cultural-note {
+            background: linear-gradient(135deg, #e8f5e8, #ffffff);
+            border: 2px solid #27ae60;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .cultural-title {
+            color: #27ae60;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        
+        .continue-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin: 30px auto;
+            transition: all 0.3s ease;
+            display: block;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .memory-verse {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+            border: 3px solid #fdcb6e;
+        }
+        
+        .memory-title {
+            color: #d63031;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .character-breakdown {
+            background: #f8f9fa;
+            border: 2px solid #6c757d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .character-breakdown-title {
+            color: #495057;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .individual-character {
+            display: inline-block;
+            margin: 8px;
+            padding: 15px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+        
+        .individual-character:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .individual-character.playing {
+            background: #ffeb3b !important;
+            transform: scale(1.1) !important;
+        }
+        
+        .char-chinese {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #c0392b;
+            margin-bottom: 5px;
+        }
+        
+        .char-pinyin {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .audio-feedback {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            max-width: 300px;
+        }
+        
+        .audio-feedback.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7) !important;
+            border-radius: 6px !important;
+            box-shadow: 0 2px 8px rgba(253, 203, 110, 0.6) !important;
+            transform: scale(1.1) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="story-container">
+        <h1 class="title">Yohanes 3:16 dalam Bahasa Mandarin<br><small style="font-size: 0.6em; color: #7f8c8d;">Belajar Bahasa Mandarin Melalui Firman Tuhan</small></h1>
+        
+        <div class="main-verse">
+            <div class="verse-chinese" onclick="playFullVerse()">
+                <span class="character" data-char="上" data-pinyin="shàng" onclick="playCharacter(this)">上</span><span class="character" data-char="帝" data-pinyin="dì" onclick="playCharacter(this)">帝</span><span class="character" data-char="爱" data-pinyin="ài" onclick="playCharacter(this)">爱</span><span class="character" data-char="世" data-pinyin="shì" onclick="playCharacter(this)">世</span><span class="character" data-char="人" data-pinyin="rén" onclick="playCharacter(this)">人</span>，<span class="character" data-char="甚" data-pinyin="shèn" onclick="playCharacter(this)">甚</span><span class="character" data-char="至" data-pinyin="zhì" onclick="playCharacter(this)">至</span><span class="character" data-char="将" data-pinyin="jiāng" onclick="playCharacter(this)">将</span><span class="character" data-char="他" data-pinyin="tā" onclick="playCharacter(this)">他</span><span class="character" data-char="的" data-pinyin="de" onclick="playCharacter(this)">的</span><span class="character" data-char="独" data-pinyin="dú" onclick="playCharacter(this)">独</span><span class="character" data-char="生" data-pinyin="shēng" onclick="playCharacter(this)">生</span><span class="character" data-char="子" data-pinyin="zǐ" onclick="playCharacter(this)">子</span><span class="character" data-char="赐" data-pinyin="cì" onclick="playCharacter(this)">赐</span><span class="character" data-char="给" data-pinyin="gěi" onclick="playCharacter(this)">给</span><span class="character" data-char="他" data-pinyin="tā" onclick="playCharacter(this)">他</span><span class="character" data-char="们" data-pinyin="men" onclick="playCharacter(this)">们</span>，<span class="character" data-char="叫" data-pinyin="jiào" onclick="playCharacter(this)">叫</span><span class="character" data-char="一" data-pinyin="yī" onclick="playCharacter(this)">一</span><span class="character" data-char="切" data-pinyin="qiè" onclick="playCharacter(this)">切</span><span class="character" data-char="信" data-pinyin="xìn" onclick="playCharacter(this)">信</span><span class="character" data-char="他" data-pinyin="tā" onclick="playCharacter(this)">他</span><span class="character" data-char="的" data-pinyin="de" onclick="playCharacter(this)">的</span>，<span class="character" data-char="不" data-pinyin="bù" onclick="playCharacter(this)">不</span><span class="character" data-char="致" data-pinyin="zhì" onclick="playCharacter(this)">致</span><span class="character" data-char="灭" data-pinyin="miè" onclick="playCharacter(this)">灭</span><span class="character" data-char="亡" data-pinyin="wáng" onclick="playCharacter(this)">亡</span>，<span class="character" data-char="反" data-pinyin="fǎn" onclick="playCharacter(this)">反</span><span class="character" data-char="得" data-pinyin="dé" onclick="playCharacter(this)">得</span><span class="character" data-char="永" data-pinyin="yǒng" onclick="playCharacter(this)">永</span><span class="character" data-char="生" data-pinyin="shēng" onclick="playCharacter(this)">生</span>。
+            </div>
+            <div class="verse-pinyin">
+                Shàngdì ài shìrén, shènzhì jiāng tā de dúshēngzǐ cì gěi tāmen, jiào yīqiè xìn tā de, bù zhì mièwáng, fǎn dé yǒngshēng.
+            </div>
+            <div class="verse-english">
+                "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."
+            </div>
+            <div class="verse-indonesian">
+                "Karena begitu besar kasih Allah akan dunia ini, sehingga Ia telah mengaruniakan Anak-Nya yang tunggal, supaya setiap orang yang percaya kepada-Nya tidak binasa, melainkan beroleh hidup yang kekal."
+            </div>
+            <div class="verse-reference">约翰福音 3:16 (Yohanes 3:16)</div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        
+        <div id="lessonContent">
+            <!-- Bagian 1: Kasih Allah -->
+            <div class="lesson-section" id="section1">
+                <div class="section-title">Bagian 1: Kasih Allah - 上帝的爱</div>
+                
+                <div class="word-breakdown">
+                    <div class="word-card" onclick="highlightWord('上帝')">
+                        <div class="word-chinese">
+                            上帝
+                            <button class="pronounce-btn" onclick="playWord(this, '上帝', 'Shàngdì')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">Shàngdì</div>
+                        <div class="word-english">God</div>
+                        <div class="word-indonesian">Allah / Tuhan</div>
+                        <div class="word-explanation">
+                            Kata Tionghoa untuk Allah, secara harfiah berarti "Kaisar Tertinggi" atau "Tuhan Paling Tinggi." Digunakan oleh orang Kristen Tionghoa untuk merujuk kepada Allah yang esa dan benar.
+                        </div>
+                    </div>
+                    
+                    <div class="word-card" onclick="highlightWord('爱')">
+                        <div class="word-chinese">
+                            爱
+                            <button class="pronounce-btn" onclick="playWord(this, '爱', 'ài')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">ài</div>
+                        <div class="word-english">love (kata kerja/kata benda)</div>
+                        <div class="word-indonesian">kasih, cinta, mengasihi</div>
+                        <div class="word-explanation">
+                            Karakter ini melambangkan kasih yang mendalam dan berkorban. Dalam konteks Yohanes 3:16, ini menggambarkan kasih Allah yang tanpa syarat kepada umat manusia.
+                        </div>
+                    </div>
+                    
+                    <div class="word-card" onclick="highlightWord('世人')">
+                        <div class="word-chinese">
+                            世人
+                            <button class="pronounce-btn" onclick="playWord(this, '世人', 'shìrén')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">shìrén</div>
+                        <div class="word-english">the world, all people</div>
+                        <div class="word-indonesian">dunia, semua manusia</div>
+                        <div class="word-explanation">
+                            Secara harfiah "orang dunia" - merujuk kepada seluruh umat manusia, setiap orang di bumi tanpa terkecuali.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="character-breakdown">
+                    <div class="character-breakdown-title">Analisis Karakter Individual:</div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '上', 'shàng')">
+                        <div class="char-chinese">上</div>
+                        <div class="char-pinyin">shàng</div>
+                    </div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '帝', 'dì')">
+                        <div class="char-chinese">帝</div>
+                        <div class="char-pinyin">dì</div>
+                    </div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '爱', 'ài')">
+                        <div class="char-chinese">爱</div>
+                        <div class="char-pinyin">ài</div>
+                    </div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '世', 'shì')">
+                        <div class="char-chinese">世</div>
+                        <div class="char-pinyin">shì</div>
+                    </div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '人', 'rén')">
+                        <div class="char-chinese">人</div>
+                        <div class="char-pinyin">rén</div>
+                    </div>
+                </div>
+                
+                <div class="grammar-section">
+                    <div class="grammar-title">🔍 Fokus Tata Bahasa: Subjek + Kata Kerja + Objek</div>
+                    <div class="grammar-point">
+                        <strong>Pola Dasar:</strong> 上帝 + 爱 + 世人<br>
+                        <div class="example-sentence">
+                            Subjek (上帝) + Kata Kerja (爱) + Objek (世人) = Allah mengasihi dunia
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bagian 2: Pemberian Allah -->
+            <div class="lesson-section" id="section2" style="display: none;">
+                <div class="section-title">Bagian 2: Pemberian Allah - 上帝的礼物</div>
+                
+                <div class="word-breakdown">
+                    <div class="word-card" onclick="highlightWord('甚至')">
+                        <div class="word-chinese">
+                            甚至
+                            <button class="pronounce-btn" onclick="playWord(this, '甚至', 'shènzhì')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">shènzhì</div>
+                        <div class="word-english">so much that, even to the point of</div>
+                        <div class="word-indonesian">sampai-sampai, bahkan hingga</div>
+                        <div class="word-explanation">
+                            Menyatakan tingkat ekstrem dari kasih Allah - begitu besar kasih-Nya sehingga Ia rela memberikan Anak-Nya.
+                        </div>
+                    </div>
+                    
+                    <div class="word-card" onclick="highlightWord('独生子')">
+                        <div class="word-chinese">
+                            独生子
+                            <button class="pronounce-btn" onclick="playWord(this, '独生子', 'dúshēngzǐ')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">dúshēngzǐ</div>
+                        <div class="word-english">only son, only begotten son</div>
+                        <div class="word-indonesian">anak tunggal</div>
+                        <div class="word-explanation">
+                            独 (tunggal) + 生 (lahir) + 子 (anak laki-laki). Merujuk secara khusus kepada Yesus Kristus sebagai Anak Allah yang tunggal.
+                        </div>
+                    </div>
+                    
+                    <div class="word-card" onclick="highlightWord('赐给')">
+                        <div class="word-chinese">
+                            赐给
+                            <button class="pronounce-btn" onclick="playWord(this, '赐给', 'cì gěi')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">cì gěi</div>
+                        <div class="word-english">to give as a gift, to bestow</div>
+                        <div class="word-indonesian">menganugerahkan, memberikan sebagai hadiah</div>
+                        <div class="word-explanation">
+                            Kata formal untuk memberikan, sering digunakan untuk hadiah dari seseorang yang berkedudukan lebih tinggi. Menunjukkan pemberian Allah yang penuh anugerah.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grammar-section">
+                    <div class="grammar-title">🔍 Fokus Tata Bahasa: 甚至 (Bahkan hingga)</div>
+                    <div class="grammar-point">
+                        <strong>Pola:</strong> [Tindakan] 甚至 [Hasil ekstrem]<br>
+                        <div class="example-sentence">
+                            上帝爱世人，甚至将他的独生子赐给他们<br>
+                            <em>Allah mengasihi dunia, bahkan hingga memberikan Anak-Nya yang tunggal</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bagian 3: Iman dan Keselamatan -->
+            <div class="lesson-section" id="section3" style="display: none;">
+                <div class="section-title">Bagian 3: Iman dan Keselamatan - 信心与拯救</div>
+                
+                <div class="word-breakdown">
+                    <div class="word-card" onclick="highlightWord('一切')">
+                        <div class="word-chinese">
+                            一切
+                            <button class="pronounce-btn" onclick="playWord(this, '一切', 'yīqiè')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">yīqiè</div>
+                        <div class="word-english">all, everything, whoever</div>
+                        <div class="word-indonesian">semua, segala, siapa pun</div>
+                        <div class="word-explanation">
+                            Berarti "semua tanpa terkecuali" - keselamatan Allah tersedia bagi setiap orang yang percaya.
+                        </div>
+                    </div>
+                    
+                    <div class="word-card" onclick="highlightWord('信')">
+                        <div class="word-chinese">
+                            信
+                            <button class="pronounce-btn" onclick="playWord(this, '信', 'xìn')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">xìn</div>
+                        <div class="word-english">believe, trust, have faith</div>
+                        <div class="word-indonesian">percaya, beriman, mempercayai</div>
+                        <div class="word-explanation">
+                            Kunci keselamatan - mempercayai dan beriman kepada Yesus Kristus dengan segenap hati dan pikiran.
+                        </div>
+                    </div>
+                    
+                    <div class="word-card" onclick="highlightWord('灭亡')">
+                        <div class="word-chinese">
+                            灭亡
+                            <button class="pronounce-btn" onclick="playWord(this, '灭亡', 'mièwáng')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">mièwáng</div>
+                        <div class="word-english">perish, be destroyed</div>
+                        <div class="word-indonesian">binasa, musnah</div>
+                        <div class="word-explanation">
+                            Kematian rohani dan keterpisahan dari Allah. Apa yang diselamatkan oleh orang percaya melalui Kristus.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grammar-section">
+                    <div class="grammar-title">🔍 Fokus Tata Bahasa: 不致...反得... (Tidak...melainkan...)</div>
+                    <div class="grammar-point">
+                        <strong>Pola:</strong> 不致 [hasil negatif], 反得 [hasil positif]<br>
+                        <div class="example-sentence">
+                            不致灭亡，反得永生<br>
+                            <em>tidak binasa, melainkan beroleh hidup kekal</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bagian 4: Hidup Kekal -->
+            <div class="lesson-section" id="section4" style="display: none;">
+                <div class="section-title">Bagian 4: Hidup Kekal - 永恒的生命</div>
+                
+                <div class="word-breakdown">
+                    <div class="word-card" onclick="highlightWord('永生')">
+                        <div class="word-chinese">
+                            永生
+                            <button class="pronounce-btn" onclick="playWord(this, '永生', 'yǒngshēng')">
+                                🔊 Dengar
+                            </button>
+                        </div>
+                        <div class="word-pinyin">yǒngshēng</div>
+                        <div class="word-english">eternal life</div>
+                        <div class="word-indonesian">hidup kekal</div>
+                        <div class="word-explanation">
+                            永 (kekal, selamanya) + 生 (hidup). Bukan hanya hidup tanpa akhir, tetapi kualitas hidup yang berasal dari mengenal Allah.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cultural-note">
+                    <div class="cultural-title">🏮 Wawasan Budaya</div>
+                    <p>Dalam budaya Tionghoa, konsep 永恒 (keabadian) dan 生命 (kehidupan) memiliki makna filosofis yang mendalam. Konsep Kristen tentang 永生 (hidup kekal) menawarkan pengharapan yang beresonansi dengan keinginan Tionghoa akan umur panjang dan eksistensi yang bermakna.</p>
+                </div>
+                
+                <div class="memory-verse">
+                    <div class="memory-title">💝 Ingatlah Kebenaran Ini</div>
+                    <div style="font-size: 1.1em; color: #2c3e50;">
+                        <strong>上帝爱你！</strong><br>
+                        <em>Shàngdì ài nǐ!</em><br>
+                        Allah mengasihi kamu!
+                    </div>
+                </div>
+                
+                <div class="grammar-section">
+                    <div class="grammar-title">🔍 Struktur Kalimat Lengkap</div>
+                    <div class="grammar-point">
+                        Ayat ini mendemonstrasikan struktur kalimat Mandarin yang kompleks:<br>
+                        <strong>Sebab → Tingkat → Hasil → Syarat → Akibat</strong>
+                        <div class="example-sentence">
+                            上帝爱世人 (Sebab)<br>
+                            甚至将他的独生子赐给他们 (Tingkat)<br>
+                            叫一切信他的 (Syarat)<br>
+                            不致灭亡，反得永生 (Akibat)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="character-breakdown">
+                    <div class="character-breakdown-title">Latihan Karakter - Klik untuk Mendengar:</div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '永', 'yǒng')">
+                        <div class="char-chinese">永</div>
+                        <div class="char-pinyin">yǒng</div>
+                    </div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '生', 'shēng')">
+                        <div class="char-chinese">生</div>
+                        <div class="char-pinyin">shēng</div>
+                    </div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '信', 'xìn')">
+                        <div class="char-chinese">信</div>
+                        <div class="char-pinyin">xìn</div>
+                    </div>
+                    <div class="individual-character" onclick="playIndividualChar(this, '爱', 'ài')">
+                        <div class="char-chinese">爱</div>
+                        <div class="char-pinyin">ài</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="continue-btn" onclick="nextSection()">Lanjutkan Belajar 继续学习</button>
+        
+        <div style="text-align: center; margin-top: 25px; color: #7f8c8d;">
+            <small>✝️ Belajar Bahasa Mandarin melalui Firman Tuhan • Kiranya kasih-Nya memenuhi hati Anda saat belajar</small>
+        </div>
+    </div>
+
+    <!-- Audio Feedback Element -->
+    <div id="audioFeedback" class="audio-feedback"></div>
+
+    <script>
+        // Global variables
+        let currentSection = 1;
+        const totalSections = 4;
+        let isPlaying = false;
+        
+        // Speech Synthesis setup
+        const synth = window.speechSynthesis;
+        let chineseVoice = null;
+        
+        // Initialize when DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            updateProgress();
+            initVoices();
+        });
+        
+        // Initialize Chinese voice
+        function initVoices() {
+            console.log('Initializing voices...');
+            
+            function loadVoices() {
+                const voices = synth.getVoices();
+                console.log('Available voices:', voices.length);
+                
+                // Find Chinese voice with priority order
+                chineseVoice = voices.find(voice => voice.lang === 'zh-CN') ||
+                              voices.find(voice => voice.lang === 'zh-TW') ||
+                              voices.find(voice => voice.lang.includes('zh')) ||
+                              voices.find(voice => voice.name.toLowerCase().includes('chinese')) ||
+                              voices.find(voice => voice.name.toLowerCase().includes('mandarin'));
+                
+                if (chineseVoice) {
+                    console.log('Chinese voice found:', chineseVoice.name, chineseVoice.lang);
+                } else {
+                    console.log('No Chinese voice found, will use fallback');
+                }
+            }
+            
+            // Load voices immediately if available
+            if (synth.getVoices().length > 0) {
+                loadVoices();
+            }
+            
+            // Also listen for voiceschanged event
+            synth.addEventListener('voiceschanged', loadVoices);
+            
+            // Fallback: try again after delay
+            setTimeout(loadVoices, 100);
+            setTimeout(loadVoices, 500);
+        }
+        
+        // Progress functions
+        function nextSection() {
+            if (currentSection < totalSections) {
+                document.getElementById(`section${currentSection}`).style.display = 'none';
+                currentSection++;
+                document.getElementById(`section${currentSection}`).style.display = 'block';
+                updateProgress();
+                
+                if (currentSection === totalSections) {
+                    const btn = document.querySelector('.continue-btn');
+                    btn.innerHTML = '🙏 Pelajaran Selesai! 课程完成！<br><small style="font-size: 0.8em;">Kiranya Allah memberkati perjalanan belajar Anda</small>';
+                    btn.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+                    btn.onclick = null;
+                    btn.style.cursor = 'default';
+                }
+            }
+        }
+        
+        function updateProgress() {
+            const progress = (currentSection / totalSections) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        // Audio functions
+        function playCharacter(element) {
+            if (isPlaying) return;
+            
+            const character = element.getAttribute('data-char');
+            const pinyin = element.getAttribute('data-pinyin');
+            
+            console.log(`Playing character: ${character} (${pinyin})`);
+            
+            // Visual feedback
+            element.classList.add('playing');
+            setTimeout(() => {
+                element.classList.remove('playing');
+            }, 800);
+            
+            // Play audio
+            speakChinese(character, pinyin);
+        }
+        
+        function playWord(button, word, pinyin) {
+            if (isPlaying) return;
+            
+            console.log(`Playing word: ${word} (${pinyin})`);
+            
+            // Visual feedback for button
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '🔊 Memutar...';
+            button.style.background = '#2ecc71';
+            
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.style.background = '#3498db';
+            }, 1500);
+            
+            // Play audio
+            speakChinese(word, pinyin);
+        }
+        
+        function playIndividualChar(element, character, pinyin) {
+            if (isPlaying) return;
+            
+            console.log(`Playing individual char: ${character} (${pinyin})`);
+            
+            // Visual feedback
+            element.classList.add('playing');
+            setTimeout(() => {
+                element.classList.remove('playing');
+            }, 800);
+            
+            // Play audio
+            speakChinese(character, pinyin);
+        }
+        
+        function playFullVerse() {
+            if (isPlaying) return;
+            
+            const fullText = "上帝爱世人，甚至将他的独生子赐给他们，叫一切信他的，不致灭亡，反得永生。";
+            const pinyin = "Shàngdì ài shìrén, shènzhì jiāng tā de dúshēngzǐ cì gěi tāmen, jiào yīqiè xìn tā de, bù zhì mièwáng, fǎn dé yǒngshēng.";
+            
+            console.log('Playing full verse');
+            
+            // Visual feedback
+            const verseElement = document.querySelector('.verse-chinese');
+            verseElement.classList.add('playing');
+            setTimeout(() => {
+                verseElement.classList.remove('playing');
+            }, 3000);
+            
+            // Show feedback
+            showFeedback('Memutar Yohanes 3:16...');
+            
+            // Play audio
+            speakChinese(fullText, pinyin, 0.4);
+        }
+        
+        function speakChinese(text, pinyin, rate = 0.6) {
+            if (isPlaying) return;
+            
+            isPlaying = true;
+            
+            if (synth && chineseVoice) {
+                // Stop any current speech
+                synth.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = chineseVoice;
+                utterance.rate = rate;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                
+                utterance.onstart = () => {
+                    console.log(`Speech started: ${text}`);
+                };
+                
+                utterance.onend = () => {
+                    console.log(`Speech ended: ${text}`);
+                    isPlaying = false;
+                };
+                
+                utterance.onerror = (event) => {
+                    console.error('Speech error:', event);
+                    isPlaying = false;
+                    showFeedback(`${text} (${pinyin})`);
+                };
+                
+                synth.speak(utterance);
+            } else {
+                // Fallback: show pinyin
+                console.log(`Fallback - showing pinyin: ${pinyin}`);
+                showFeedback(`${text} (${pinyin})`);
+                isPlaying = false;
+            }
+        }
+        
+        function showFeedback(text) {
+            const feedback = document.getElementById('audioFeedback');
+            feedback.textContent = text;
+            feedback.classList.add('show');
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 2500);
+        }
+        
+        function highlightWord(word) {
+            console.log(`Highlighting word: ${word}`);
+            
+            // Find matching characters in the main verse
+            const characters = document.querySelectorAll('.character');
+            let matchingChars = [];
+            
+            // Check each character to see if it's part of the word
+            for (let char of characters) {
+                const charText = char.getAttribute('data-char');
+                if (word.includes(charText)) {
+                    matchingChars.push(char);
+                }
+            }
+            
+            // Highlight matching characters
+            if (matchingChars.length > 0) {
+                matchingChars.forEach(char => {
+                    char.classList.add('highlight');
+                });
+                
+                // Remove highlight after delay
+                setTimeout(() => {
+                    matchingChars.forEach(char => {
+                        char.classList.remove('highlight');
+                    });
+                }, 3000);
+                
+                console.log(`Highlighted ${matchingChars.length} characters for word: ${word}`);
+            } else {
+                console.log(`No characters found for word: ${word}`);
+            }
+        }
+        
+        // Test speech synthesis availability
+        if ('speechSynthesis' in window) {
+            console.log('Speech Synthesis API is supported');
+        } else {
+            console.log('Speech Synthesis API is not supported');
+            showFeedback('Audio tidak didukung di browser ini');
+        }
+    </script>
+</body>
+</html>
